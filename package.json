@@ -1,0 +1,35 @@
+{
+  "name": "ecommerce",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite dev",
+    "build": "vite build && tsc --noEmit",
+    "preview": "vite preview",
+    "deploy": "npm run build && wrangler deploy",
+    "cf-typegen": "wrangler types"
+  },
+  "dependencies": {
+    "@tanstack/react-router": "1.170.40",
+    "@tanstack/react-start": "1.168.59",
+    "react": "19.2.8",
+    "react-dom": "19.2.8",
+    "tailwindcss": "4.2.2",
+    "vite-tsconfig-paths": "6.1.1"
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "4.2.2",
+    "@types/node": "22.20.1",
+    "@types/react": "19.2.18",
+    "@types/react-dom": "19.2.4",
+    "@cloudflare/workers-types": "5.20260930.2",
+    "@vitejs/plugin-react": "5.2.0",
+    "typescript": "5.9.3",
+    "vite": "7.3.6",
+    "@cloudflare/vite-plugin": "1.62.0",
+    "wrangler": "4.145.0"
+  },
+  "engines": {
+    "node": ">=22.0.0"
+  }
+}

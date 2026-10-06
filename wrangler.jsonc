@@ -1,0 +1,20 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "trivellejoias",
+  "compatibility_date": "2026-10-03",
+  "compatibility_flags": ["nodejs_compat"],
+  "main": "@tanstack/react-start/server-entry",
+  "observability": {
+    "enabled": true
+  },
+  "kv_namespaces": [
+    {
+      "binding": "CATALOG_KV"
+    }
+  ],
+  "secrets": {
+    "required": ["ADMIN_PASSWORD"]
+  }
+  // No KV ID is hardcoded here because the namespace belongs to your Cloudflare account.
+  // Bind your KV namespace in Cloudflare as: CATALOG_KV
+}

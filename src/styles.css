@@ -1,0 +1,28 @@
+@import "tailwindcss" source("../");
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&family=Inter:wght@400;500;600&display=swap');
+
+
+:root {
+  --color-brand: #b97a7c;
+  --color-brand-dark: #8f5254;
+  --color-brand-light: #f3e6e6;
+  --color-ink: #2c1618;
+}
+
+body {
+  margin: 0;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  color: var(--color-ink);
+  background-color: #fffdfc;
+}
+
+.font-display {
+  font-family: 'Playfair Display', serif;
+}
+
+code {
+  font-family: Menlo, Monaco, Consolas, 'Courier New', monospace;
+}
+
+@keyframes logoReveal { 0% { opacity: 0; transform: scale(0.92); } 22% { opacity: 1; transform: scale(1); } 100% { opacity: 0; transform: scale(1.04); } }
