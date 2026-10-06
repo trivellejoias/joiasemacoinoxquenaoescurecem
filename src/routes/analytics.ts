@@ -41,7 +41,7 @@ export const Route = createFileRoute('/analytics')({
           }
 
           const allowed = new Set(['visit', 'product_view', 'whatsapp_click', 'instagram_click'])
-          if (!allowed.has(body?.type)) return json({ error: 'invalid_event' }, 400)
+          if (!allowed.has(String(body?.type ?? ''))) return json({ error: 'invalid_event' }, 400)
 
           const day = new Date().toISOString().slice(0, 10)
           const current = (await store.get<Summary>('analytics:summary', 'json')) ?? emptySummary()

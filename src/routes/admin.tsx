@@ -59,9 +59,9 @@ function AdminPage() {
     const catalog = await catalogResponse.json()
     const remoteSettings = settingsResponse.ok ? await settingsResponse.json() : {}
     const remoteAdditions = additionsResponse.ok ? await additionsResponse.json() : {}
-    setOverrides(catalog ?? {})
+    setOverrides((catalog ?? {}) as CatalogOverrides)
     setSettings((prev) => ({ ...prev, ...(remoteSettings ?? {}) }))
-    setAdditions(remoteAdditions ?? {})
+    setAdditions((remoteAdditions ?? {}) as CatalogAdditions)
     setLoaded(true)
   }
 
