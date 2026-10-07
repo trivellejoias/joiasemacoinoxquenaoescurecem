@@ -7,9 +7,12 @@
   "observability": {
     "enabled": true
   },
-  "kv_namespaces": [
-    {
-      "binding": "CATALOG_KV"
+ "kv_namespaces": [
+  {
+    "binding": "CATALOG_KV",
+    "id": "2a3709649b3d4a06b38d76a090d1419b"
+  }
+]
     }
   ],
   "secrets": {
