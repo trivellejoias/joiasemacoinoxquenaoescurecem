@@ -7,17 +7,13 @@
   "observability": {
     "enabled": true
   },
- "kv_namespaces": [
-  {
-    "binding": "CATALOG_KV",
-    "id": "2a3709649b3d4a06b38d76a090d1419b"
-  }
-]
+  "kv_namespaces": [
+    {
+      "binding": "CATALOG_KV",
+      "id": "2a3709649b3d4a06b38d76a090d1419b"
     }
   ],
   "secrets": {
     "required": ["ADMIN_PASSWORD"]
   }
-  // No KV ID is hardcoded here because the namespace belongs to your Cloudflare account.
-  // Bind your KV namespace in Cloudflare as: CATALOG_KV
 }
