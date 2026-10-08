@@ -11,6 +11,10 @@ function json(body: unknown, status = 200) {
   return new Response(JSON.stringify(body), { status, headers })
 }
 
+function rawJson(value: string | null, status = 200) {
+  return new Response(value ?? '{}', { status, headers })
+}
+
 export const Route = createFileRoute('/catalog-data')({
   server: {
     handlers: {
@@ -20,7 +24,7 @@ export const Route = createFileRoute('/catalog-data')({
           const type = new URL(request.url).searchParams.get('type')
           if (type === 'settings') return json((await store.get('settings', 'json')) ?? {})
           if (type === 'additions') return json((await store.get('additions', 'json')) ?? {})
-          return json((await store.get(KEY, 'json')) ?? {})
+          return rawJson((await store.get(KEY, 'text')) as string | null)
         } catch (error) {
           console.error('catalog-data GET error', error)
           if (error instanceof Error && error.message === 'storage_binding_invalid') {

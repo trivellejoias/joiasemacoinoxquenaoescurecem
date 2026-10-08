@@ -1,7 +1,7 @@
 import { env } from 'cloudflare:workers'
 
 export type CatalogKV = {
-  get<T = unknown>(key: string, type: 'json'): Promise<T | null>
+  get<T = unknown>(key: string, type: 'json' | 'text'): Promise<T | string | null>
   put(key: string, value: string, options?: { expirationTtl?: number; metadata?: unknown }): Promise<void>
 }
 
