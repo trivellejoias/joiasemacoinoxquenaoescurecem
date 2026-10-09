@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { Link, createFileRoute } from '@tanstack/react-router'
 import products, { type Product } from '@/data/products'
 import { BuyButton } from '@/components/BuyButton'
+import { InstagramIcon, WhatsAppIcon } from '@/components/SocialIcons'
 import { applyOverride, loadCatalogAdditions, loadCatalogOverrides, loadCatalogSettings, type CatalogAdditions, type CatalogOverrides, type CatalogSettings, whatsappHref } from '@/lib/catalog'
 import { trackEvent, trackVisitOnce } from '@/lib/analytics'
 
@@ -118,13 +119,42 @@ function ProductsIndex() {
         </div>
       </main>
 
-      <section className="max-w-5xl mx-auto px-6 pb-10">
-        <div className="rounded-3xl bg-[color:var(--color-brand-light)] p-6 md:p-8 flex flex-col md:flex-row items-center justify-between gap-5">
-          <div className="text-center md:text-left"><p className="font-display text-2xl">Fale com a Trivelle 💎</p><p className="text-sm opacity-70 mt-1">Acompanhe novidades ou fale com a gente pelo WhatsApp.</p></div>
-          <div className="flex flex-wrap justify-center gap-3">
-            {settings.instagramUrl && <a onClick={() => trackEvent({ type: 'instagram_click', path: window.location.pathname })} href={settings.instagramUrl} target="_blank" rel="noopener noreferrer" className="rounded-full px-5 py-2.5 bg-white border border-[color:var(--color-brand)] text-sm font-medium">◎ Instagram</a>}
-            {settings.whatsappNumber && <a onClick={() => trackEvent({ type: 'whatsapp_click', path: window.location.pathname })} href={whatsappHref(settings.whatsappNumber, settings.whatsappMessage)} target="_blank" rel="noopener noreferrer" className="rounded-full px-5 py-2.5 bg-[color:var(--color-brand-dark)] text-white text-sm font-medium">☏ WhatsApp</a>}
-          </div>
+      <section className="max-w-5xl mx-auto px-6 pb-10" aria-label="Entre em contato com a Trivelle">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          {settings.whatsappNumber && (
+            <a
+              onClick={() => trackEvent({ type: 'whatsapp_click', path: window.location.pathname })}
+              href={whatsappHref(settings.whatsappNumber, settings.whatsappMessage)}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-4 rounded-2xl bg-[color:var(--color-brand-light)] border border-[color:var(--color-brand)]/20 p-5 transition hover:shadow-md focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--color-brand-dark)]"
+              aria-label="Dúvidas? Nos chame no WhatsApp"
+            >
+              <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-white text-[color:var(--color-brand-dark)]" aria-hidden="true"><WhatsAppIcon className="h-6 w-6" /></span>
+              <span className="flex-1">
+                <span className="block font-display text-xl text-[color:var(--color-brand-dark)]">Dúvidas?</span>
+                <span className="mt-1 block text-sm text-[color:var(--color-ink)]/75">Nos chame no WhatsApp</span>
+              </span>
+              <span className="text-lg text-[color:var(--color-brand-dark)]" aria-hidden="true">↗</span>
+            </a>
+          )}
+          {settings.instagramUrl && (
+            <a
+              onClick={() => trackEvent({ type: 'instagram_click', path: window.location.pathname })}
+              href={settings.instagramUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-4 rounded-2xl bg-[color:var(--color-brand-light)] border border-[color:var(--color-brand)]/20 p-5 transition hover:shadow-md focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[color:var(--color-brand-dark)]"
+              aria-label="Nos siga no Instagram"
+            >
+              <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-white text-[color:var(--color-brand-dark)]" aria-hidden="true"><InstagramIcon className="h-6 w-6" /></span>
+              <span className="flex-1">
+                <span className="block font-display text-xl text-[color:var(--color-brand-dark)]">Nos siga no Instagram</span>
+                <span className="mt-1 block text-sm text-[color:var(--color-ink)]/75">Acompanhe a Trivelle</span>
+              </span>
+              <span className="text-lg text-[color:var(--color-brand-dark)]" aria-hidden="true">↗</span>
+            </a>
+          )}
         </div>
       </section>
       <footer className="border-t border-[color:var(--color-brand-light)] py-10 text-center text-sm text-[color:var(--color-ink)]/60">
