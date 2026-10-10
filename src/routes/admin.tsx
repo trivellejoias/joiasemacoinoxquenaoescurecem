@@ -248,14 +248,16 @@ function AdminPage() {
         let detail = ''
         try { detail = String(((await response.json()) as { error?: unknown })?.error ?? '') } catch {}
         if (response.status === 503 || detail === 'storage_not_configured' || detail === 'storage_binding_invalid') {
-          throw new Error('O armazenamento do Cloudflare não está disponível. Vincule o KV como CATALOG_KV e faça um novo deploy.')
+          throw new Error('Falha no armazenamento (Cloudflare KV). Confirme se o Worker está vinculado ao namespace CATALOG_KV correto e publique novamente. Nenhuma alteração foi confirmada como salva.')
         }
         if (response.status === 401) {
           throw new Error('Sua senha de administrador não foi aceita. Entre novamente.')
         }
-        throw new Error('O servidor recusou o salvamento.')
+        throw new Error(`O servidor recusou o salvamento (HTTP ${response.status}). Nenhuma alteração foi confirmada como salva.`)
       }
-      setSavedMessage('✓ Tudo salvo no catálogo para todas as clientes.'); window.setTimeout(() => setSavedMessage(''), 5000)
+      const result = await response.json().catch(() => ({})) as { ok?: boolean; savedAt?: string }
+      if (result.ok !== true) throw new Error('O servidor não confirmou a gravação. Tente novamente.')
+      setSavedMessage('✓ Salvamento confirmado pelo servidor. Atualize a página para conferir.'); window.setTimeout(() => setSavedMessage(''), 7000)
     } catch (error) {
       setSavedMessage(error instanceof Error ? error.message : 'Não foi possível salvar. Verifique sua conexão e tente novamente.')
     }
