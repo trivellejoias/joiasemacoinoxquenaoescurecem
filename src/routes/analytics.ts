@@ -1,4 +1,3 @@
-```typescript
 import { createFileRoute } from '@tanstack/react-router'
 import { getAdminPassword, getCatalogKV } from '@/lib/cloudflare-store.server'
 
