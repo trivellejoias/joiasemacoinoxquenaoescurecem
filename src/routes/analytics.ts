@@ -20,7 +20,7 @@ const emptySummary = (): Summary => ({
   days: {},
 })
 
-function json(body: unknown, status = 200) {
+function jsonResponse(body: unknown, status = 200) {
   return Response.json(body, {
     status,
     headers: { 'Cache-Control': 'no-store' },
@@ -35,35 +35,35 @@ export const Route = createFileRoute('/analytics')({
           const body = (await request.json()) as Record<string, unknown>
           const store = getCatalogKV()
 
-          if (body?.action === 'stats') {
+          if (body.action === 'stats') {
             const expected = getAdminPassword()
 
             if (!expected || body.password !== expected) {
-              return json({ error: 'unauthorized' }, 401)
+              return jsonResponse({ error: 'unauthorized' }, 401)
             }
 
-            const rawSummary = await store.get('analytics:summary', 'text')
-            const summary: Summary = rawSummary
-              ? (JSON.parse(rawSummary) as Summary)
+            const raw = await store.get('analytics:summary', 'text')
+            const summary: Summary = raw
+              ? JSON.parse(raw) as Summary
               : emptySummary()
 
-            return json(summary)
+            return jsonResponse(summary)
           }
 
-          const allowed = new Set([
+          const allowed = [
             'visit',
             'product_view',
             'whatsapp_click',
             'instagram_click',
-          ])
+          ]
 
-          if (!allowed.has(String(body?.type ?? ''))) {
-            return json({ error: 'invalid_event' }, 400)
+          if (!allowed.includes(String(body.type ?? ''))) {
+            return jsonResponse({ error: 'invalid_event' }, 400)
           }
 
-          const rawCurrent = await store.get('analytics:summary', 'text')
-          const current: Summary = rawCurrent
-            ? (JSON.parse(rawCurrent) as Summary)
+          const raw = await store.get('analytics:summary', 'text')
+          const current: Summary = raw
+            ? JSON.parse(raw) as Summary
             : emptySummary()
 
           const day = new Date().toISOString().slice(0, 10)
@@ -84,7 +84,6 @@ export const Route = createFileRoute('/analytics')({
             daily.productViews++
 
             const id = String(body.productId ?? '')
-
             if (id) {
               const item = current.products[id] ?? {
                 name: String(body.productName ?? 'Produto'),
@@ -93,11 +92,7 @@ export const Route = createFileRoute('/analytics')({
               }
 
               item.views++
-
-              if (body.productName) {
-                item.name = String(body.productName)
-              }
-
+              if (body.productName) item.name = String(body.productName)
               current.products[id] = item
             }
           }
@@ -107,7 +102,6 @@ export const Route = createFileRoute('/analytics')({
             daily.whatsappClicks++
 
             const id = String(body.productId ?? '')
-
             if (id) {
               const item = current.products[id] ?? {
                 name: String(body.productName ?? 'Produto'),
@@ -116,11 +110,7 @@ export const Route = createFileRoute('/analytics')({
               }
 
               item.whatsappClicks++
-
-              if (body.productName) {
-                item.name = String(body.productName)
-              }
-
+              if (body.productName) item.name = String(body.productName)
               current.products[id] = item
             }
           }
@@ -132,19 +122,15 @@ export const Route = createFileRoute('/analytics')({
 
           current.days[day] = daily
 
-          // Mantém apenas os últimos 90 dias de estatísticas.
           const cutoff = new Date()
           cutoff.setUTCDate(cutoff.getUTCDate() - 90)
           const cutoffDay = cutoff.toISOString().slice(0, 10)
 
           for (const savedDay of Object.keys(current.days)) {
-            if (savedDay < cutoffDay) {
-              delete current.days[savedDay]
-            }
+            if (savedDay < cutoffDay) delete current.days[savedDay]
           }
 
           const productIds = Object.keys(current.products)
-
           if (productIds.length > 300) {
             productIds.sort(
               (a, b) =>
@@ -163,25 +149,19 @@ export const Route = createFileRoute('/analytics')({
             { metadata: { updatedAt: new Date().toISOString() } },
           )
 
-          return json({ ok: true })
+          return jsonResponse({ ok: true })
         } catch (error) {
           console.error('analytics error', error)
 
-          if (
-            error instanceof Error &&
-            error.message === 'storage_not_configured'
-          ) {
-            return json({ error: 'storage_not_configured' }, 503)
+          if (error instanceof Error && error.message === 'storage_not_configured') {
+            return jsonResponse({ error: 'storage_not_configured' }, 503)
           }
 
-          if (
-            error instanceof Error &&
-            error.message === 'storage_binding_invalid'
-          ) {
-            return json({ error: 'storage_binding_invalid' }, 503)
+          if (error instanceof Error && error.message === 'storage_binding_invalid') {
+            return jsonResponse({ error: 'storage_binding_invalid' }, 503)
           }
 
-          return json({ error: 'server_error' }, 500)
+          return jsonResponse({ error: 'server_error' }, 500)
         }
       },
     },
