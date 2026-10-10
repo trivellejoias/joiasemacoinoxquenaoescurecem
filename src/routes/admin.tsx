@@ -196,7 +196,7 @@ function AdminPage() {
         const img = new Image()
         img.onerror = () => reject(new Error('Arquivo de imagem inválido.'))
         img.onload = () => {
-          const max = 1400
+          const max = 900
           const scale = Math.min(1, max / Math.max(img.width, img.height))
           const canvas = document.createElement('canvas')
           canvas.width = Math.max(1, Math.round(img.width * scale))
@@ -204,7 +204,7 @@ function AdminPage() {
           const ctx = canvas.getContext('2d')
           if (!ctx) return reject(new Error('Seu navegador não conseguiu processar a imagem.'))
           ctx.drawImage(img, 0, 0, canvas.width, canvas.height)
-          resolve(canvas.toDataURL('image/webp', 0.78))
+          resolve(canvas.toDataURL('image/webp', 0.65))
         }
         img.src = String(reader.result)
       }

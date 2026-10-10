@@ -71,6 +71,20 @@ export const Route = createFileRoute('/analytics')({
           if (body.type === 'instagram_click') { current.instagramClicks++; daily.instagramClicks++ }
 
           current.days[day] = daily
+
+          // Keep the summary bounded so each event does not parse/write an ever-growing KV value.
+          const cutoff = new Date()
+          cutoff.setUTCDate(cutoff.getUTCDate() - 90)
+          const cutoffDay = cutoff.toISOString().slice(0, 10)
+          for (const savedDay of Object.keys(current.days)) {
+            if (savedDay < cutoffDay) delete current.days[savedDay]
+          }
+          const productIds = Object.keys(current.products)
+          if (productIds.length > 300) {
+            productIds.sort((a, b) => (current.products[b]?.views ?? 0) - (current.products[a]?.views ?? 0))
+            for (const oldId of productIds.slice(300)) delete current.products[oldId]
+          }
+
           await store.put('analytics:summary', JSON.stringify(current), { metadata: { updatedAt: new Date().toISOString() } })
           return json({ ok: true })
         } catch (error) {

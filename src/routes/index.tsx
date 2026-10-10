@@ -133,7 +133,7 @@ function ProductsIndex() {
               <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-white text-[color:var(--color-brand-dark)]" aria-hidden="true"><WhatsAppIcon className="h-6 w-6" /></span>
               <span className="flex-1">
                 <span className="block font-display text-xl text-[color:var(--color-brand-dark)]">Dúvidas?</span>
-                <span className="mt-1 block text-sm text-[color:var(--color-ink)]/75">Nos chame no WhatsApp</span>
+                <span className="mt-1 block text-sm text-[color:var(--color-ink)]/75">Nos chama no WhatsApp</span>
               </span>
               <span className="text-lg text-[color:var(--color-brand-dark)]" aria-hidden="true">↗</span>
             </a>
