@@ -30,8 +30,6 @@ function ProductsIndex() {
   const [activeCategory, setActiveCategory] = useState<
     (typeof categories)[number]
   >('Todos')
-  // Render only a small first batch to reduce Worker SSR memory for large catalogs.
-  const [visibleCount, setVisibleCount] = useState(60)
 
   const filtered = useMemo(() => {
     const baseProducts = [...products, ...Object.values(additions)]
@@ -62,7 +60,7 @@ function ProductsIndex() {
           {categories.map((category) => (
             <button
               key={category}
-              onClick={() => { setActiveCategory(category); setVisibleCount(60) }}
+              onClick={() => setActiveCategory(category)}
               className={`px-5 py-2 rounded-full text-sm tracking-wide border transition-colors ${
                 activeCategory === category
                   ? 'bg-[color:var(--color-brand-dark)] text-white border-[color:var(--color-brand-dark)]'
@@ -75,7 +73,7 @@ function ProductsIndex() {
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-          {filtered.slice(0, visibleCount).map((product) => (
+          {filtered.map((product) => (
             <div
               key={product.id}
               className="group rounded-2xl border border-[color:var(--color-brand-light)] overflow-hidden bg-white hover:shadow-xl transition-shadow"
@@ -119,11 +117,6 @@ function ProductsIndex() {
             </div>
           ))}
         </div>
-        {filtered.length > visibleCount && (
-          <div className="text-center mt-10">
-            <button type="button" onClick={() => setVisibleCount((count) => count + 60)} className="rounded-full border border-[color:var(--color-brand)] px-6 py-3 text-sm text-[color:var(--color-brand-dark)] hover:bg-[color:var(--color-brand-light)]">Carregar mais peças ({filtered.length - visibleCount} restantes)</button>
-          </div>
-        )}
       </main>
 
       <section className="max-w-5xl mx-auto px-6 pb-10" aria-label="Entre em contato com a Trivelle">

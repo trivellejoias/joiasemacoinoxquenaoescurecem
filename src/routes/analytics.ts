@@ -44,8 +44,10 @@ export const Route = createFileRoute('/analytics')({
           if (!allowed.has(String(body?.type ?? ''))) return json({ error: 'invalid_event' }, 400)
 
           const day = new Date().toISOString().slice(0, 10)
-          const storedSummary = await store.get<Summary>('analytics:summary', 'json')
-          const current: Summary = storedSummary ? (storedSummary as Summary) : emptySummary()
+          const savedSummary = await store.get<Summary>('analytics:summary', 'json')
+          const current: Summary = savedSummary && typeof savedSummary === 'object'
+            ? savedSummary as Summary
+            : emptySummary()
           const daily = current.days[day] ?? { visits: 0, productViews: 0, whatsappClicks: 0, instagramClicks: 0 }
 
           if (body.type === 'visit') { current.visits++; daily.visits++ }
