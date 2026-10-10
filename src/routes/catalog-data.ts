@@ -103,11 +103,11 @@ export const Route = createFileRoute('/catalog-data')({
 
           const store = getCatalogKV()
           const updatedAt = new Date().toISOString()
-          const storedOverrides = await externalizeImages(overrides)
+          const storedOverrides = await externalizeImages(store, overrides)
           await store.put(KEY, JSON.stringify(storedOverrides), { metadata: { updatedAt } })
 
           if (body?.additions && typeof body.additions === 'object' && !Array.isArray(body.additions)) {
-            const storedAdditions = await externalizeImages(body.additions)
+            const storedAdditions = await externalizeImages(store, body.additions)
             await store.put('additions', JSON.stringify(storedAdditions), { metadata: { updatedAt } })
           }
 
